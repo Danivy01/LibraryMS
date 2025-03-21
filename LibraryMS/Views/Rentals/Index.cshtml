@@ -1,16 +1,18 @@
-﻿@model IEnumerable<LibraryMS.Models.Rental>
+﻿@using LibraryMS.Models
+@model IEnumerable<Rental>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Home page</h2>
+<h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Add Rented Books", "CreateRental")
+    @Html.ActionLink("Create New", "CreateRental")
 </p>
 <table class="table">
     <tr>
+
         <th>
             @Html.DisplayNameFor(model => model.bookName)
         </th>

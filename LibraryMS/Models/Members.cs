@@ -22,6 +22,15 @@ namespace LibraryMS.Models
         [Display(Name = "Last Name")]
         public string lname { get; set; }
 
+        public string fullName
+        {
+            get
+            {
+                var output = fname + " " + lname;
+                return output;
+            }
+        }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

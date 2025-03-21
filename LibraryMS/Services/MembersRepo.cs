@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace LibraryMS.Services
 {
@@ -32,6 +33,12 @@ namespace LibraryMS.Services
             return members;
         }
 
+        public SelectList ListofMembers()
+        {
+            var list = new SelectList(GetAllMembers(), "Id", "fullName");
+            return list;
+        }
+
         public void CreateMember(Members member)
         {
             sql.Query("INSERT INTO tbl_members (FirstName, LastName, Email, Phone, address) VALUES (@FirstName, @LastName, @Email, @Phone, @address)", param =>
@@ -53,13 +60,14 @@ namespace LibraryMS.Services
             });
             foreach (DataRow r in dt.Rows)
             {
-                item = new Members() {
-                    Id = Convert.ToInt32(r["Id"]),
+                item = new Members()
+                {
+                    Id = r["Id"].ToInt(),
                     fname = r["FirstName"].ToString(),
                     lname = r["LastName"].ToString(),
                     email = r["Email"].ToString(),
                     phone = r["Phone"].ToString(),
-                    address = r["address"].ToString()
+                    address = r["Address"].ToString()
                 };
 
             }
@@ -68,13 +76,14 @@ namespace LibraryMS.Services
 
         public void UpdateMember(Members member)
         {
-            sql.Query("UPDATE tbl_members SET FirstName = @FirstName, LastName = @LastName, Email = @Email, Phone = @Phone, address = @address", param => 
+            sql.Query("UPDATE tbl_members SET FirstName = @FirstName, LastName = @LastName, Email = @Email, Phone = @Phone, Address = @Address WHERE Id = @Id", param => 
             {
+                param.Add("@Id", member.Id);
                 param.Add("@FirstName", member.fname);
                 param.Add("@LastName", member.lname);
                 param.Add("@Email", member.email);
                 param.Add("@Phone", member.phone);
-                param.Add("@address", member.address);
+                param.Add("@Address", member.address);
             });
         }
 

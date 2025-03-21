@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace LibraryMS.Services
 {
@@ -31,6 +32,12 @@ namespace LibraryMS.Services
 
             }
             return books;
+        }
+
+        public SelectList ListofBooks()
+        {
+            var list = new SelectList(GetAllBooks(), "Id", "title");
+            return list;
         }
 
         public void CreateBook(Books book)
@@ -71,8 +78,9 @@ namespace LibraryMS.Services
 
         public void UpdateBook(Books book)
         {
-            sql.Query("UPDATE tbl_books SET Title = @Title, Author = @Author, ISBN = @ISBN, PublishedYear = @PublishedYear, Genre = @Genre, CopiesAvailable = @CopiesAvailable", param =>
+            sql.Query("UPDATE tbl_books SET Title = @Title, Author = @Author, ISBN = @ISBN, PublishedYear = @PublishedYear, Genre = @Genre, CopiesAvailable = @CopiesAvailable WHERE Id = @Id", param =>
             {
+                param.Add("@Id", book.Id);
                 param.Add("@Title", book.title);
                 param.Add("@Author", book.author);
                 param.Add("@ISBN", book.ISBN);
