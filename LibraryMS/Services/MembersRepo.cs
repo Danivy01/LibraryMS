@@ -21,10 +21,11 @@ namespace LibraryMS.Services
             {
                 Members member = new Members();
                 member.Id = Convert.ToInt32(item["Id"]);
-                member.fname = item["fname"].ToString();
-                member.lname = item["lname"].ToString();
-                member.email = item["email"].ToString();
-                member.phone = item["address"].ToString();
+                member.fname = item["FirstName"].ToString();
+                member.lname = item["LastName"].ToString();
+                member.email = item["Email"].ToString();
+                member.phone = item["Phone"].ToString();
+                member.address = item["Address"].ToString();
 
                 members.Add(member);
             }
@@ -33,11 +34,12 @@ namespace LibraryMS.Services
 
         public void CreateMember(Members member)
         {
-            sql.Query("INSERT INTO tbl_members (fname, lname, email, address) VALUES (@fname, @lname, @email, @address)", param =>
+            sql.Query("INSERT INTO tbl_members (FirstName, LastName, Email, Phone, address) VALUES (@FirstName, @LastName, @Email, @Phone, @address)", param =>
             {
-                param.Add("@fname", member.fname);
-                param.Add("@lname", member.lname);
+                param.Add("@FirstName", member.fname);
+                param.Add("@LastName", member.lname);
                 param.Add("@email", member.email);
+                param.Add("@Phone", member.phone);
                 param.Add("@address", member.address);
             });
         }
@@ -45,7 +47,7 @@ namespace LibraryMS.Services
         public Members Find(int Id)
         {
             var item = new Members();
-            var dt = sql.Query("SELECT * FROM WHERE Id = @Id", param =>
+            var dt = sql.Query("SELECT * FROM tbl_members WHERE Id = @Id", param =>
             {
                 param.Add("@Id", Id);
             });
@@ -53,10 +55,10 @@ namespace LibraryMS.Services
             {
                 item = new Members() {
                     Id = Convert.ToInt32(r["Id"]),
-                    fname = r["fname"].ToString(),
-                    lname = r["lname"].ToString(),
-                    email = r["email"].ToString(),
-                    phone = r["phone"].ToString(),
+                    fname = r["FirstName"].ToString(),
+                    lname = r["LastName"].ToString(),
+                    email = r["Email"].ToString(),
+                    phone = r["Phone"].ToString(),
                     address = r["address"].ToString()
                 };
 
@@ -66,18 +68,19 @@ namespace LibraryMS.Services
 
         public void UpdateMember(Members member)
         {
-            sql.Query("UPDATE tbl_members SET fname = @fname, lname = @lname, email = @email, phone = @phone, address = @address", param => {
-                param.Add("@fname", member.fname);
-                param.Add("@lname", member.lname);
-                param.Add("@email", member.email);
-                param.Add("@phone", member.phone);
+            sql.Query("UPDATE tbl_members SET FirstName = @FirstName, LastName = @LastName, Email = @Email, Phone = @Phone, address = @address", param => 
+            {
+                param.Add("@FirstName", member.fname);
+                param.Add("@LastName", member.lname);
+                param.Add("@Email", member.email);
+                param.Add("@Phone", member.phone);
                 param.Add("@address", member.address);
             });
         }
 
         public void DeleteMember(Members member)
         {
-            sql.Query("DELETE * FROM WHERE Id = @Id", param =>
+            sql.Query("DELETE FROM tbl_members WHERE Id = @Id", param =>
             {
                 param.Add("@Id", member.Id);
             });

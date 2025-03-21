@@ -37,7 +37,8 @@ namespace LibraryMS.Controllers
 
         public ActionResult Edit(int Id)
         {
-            return View(Id);
+            var item = memberRp.Find(Id);
+            return View(item);
         }
 
         [HttpPost]
@@ -53,23 +54,25 @@ namespace LibraryMS.Controllers
 
         public ActionResult Delete(int Id)
         {
-            return View(Id);
+            var item = memberRp.Find(Id);
+            return View(item);
         }
 
         [HttpPost]
-        public ActionResult Delete(Members member)
+        public ActionResult Delete(MemberDeleteModelView member)
         {
             if (ModelState.IsValid)
             {
-                memberRp.DeleteMember(member);
+                memberRp.DeleteMember(new Members {Id = member.Id });
                 return RedirectToAction("Index");
             }
-            return View();
+            return View(member);
         }
 
         public ActionResult Details(int Id)
         {
-            return View(Id);
+            var item = memberRp.Find(Id);
+            return View(item);
         }
 
 

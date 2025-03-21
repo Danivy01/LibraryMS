@@ -1,13 +1,14 @@
-﻿@model IEnumerable<LibraryMS.Models.Members>
+﻿@using LibraryMS.Models
+@model IEnumerable<Members>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Members List</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Add Member", "Create")
 </p>
 <table class="table">
     <tr>
