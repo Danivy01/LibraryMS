@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace LibraryMS.Services
 {
@@ -12,21 +13,21 @@ namespace LibraryMS.Services
     {
         DbControl sql = new DbControl();
 
-        public List<Rental> GetAllRental()
+        public List<RentalModelView> GetAllRental()
         {
-            List<Rental> rental = new List<Rental>();
+            List<RentalModelView> rental = new List<RentalModelView>();
             var dt = sql.Query("SELECT * FROM vw_rental");
             foreach (DataRow row in dt.Rows)
             {
-                Rental rent = new Rental();
+                RentalModelView rent = new RentalModelView();
                 rent.Id = row["Id"].ToInt();
                 rent.bookId = row["bookId"].ToInt();
-                rent.bookName = row["bookName"].ToString();
-                rent.memberId = row["memberId"].ToInt();
+                rent.bookName = row["bookTitle"].ToString();
                 rent.memberName = row["memberName"].ToString();
+                rent.memberId = row["memberId"].ToInt();
                 rent.rentalDate = row["rentalDate"].ToDateTime();
                 rent.returnDate = row["returnDate"].ToDateTime();
-                rent.status = row["status"].ToBool();
+                rent.status = row["status"].ToString();
 
                 rental.Add(rent);
             }
@@ -49,31 +50,30 @@ namespace LibraryMS.Services
         public Rental Find(int Id)
         {
             var rental = new Rental();
-            var dt = sql.Query("SELECT * FROM tbl_rental WHERE Id = @Id", param =>
+            var dt = sql.Query("SELECT * FROM vw_rental WHERE Id = @Id", param =>
             {
-                param.Add("@Id", rental.Id);
+                param.Add("@Id", Id);
             });
             foreach (DataRow r in dt.Rows)
             {
                 rental = new Rental();
                 rental.bookId = r["bookId"].ToInt();
-                rental.bookName = r["bookname"].ToString();
+                rental.bookName = r["bookTitle"].ToString();
+                rental.memberName = r["memberName"].ToString();
                 rental.memberId = r["memberId"].ToInt();
                 rental.rentalDate = r["rentalDate"].ToDateTime();
                 rental.returnDate = r["returnDate"].ToDateTime();
-                rental.status = r["status"].ToBool();
+                rental.status = r["status"].ToString();
             }
             return rental;
         }
 
         public void UpdateRent(Rental rental)
         {
-            sql.Query("UPDATE tbl_rental SET bookId = @bookId, bookName = @bookName, memberId = @memberId, memberName = @memberName, rentalDate = @rentalDate, returnDate = @returnDate, status = @status", param =>
+            sql.Query("UPDATE tbl_rental SET bookId = @bookId, memberId = @memberId, rentalDate = @rentalDate, returnDate = @returnDate, status = @status", param =>
             {
                 param.Add("@bookId", rental.bookId);
-                param.Add("@bookName", rental.bookName);
                 param.Add("@memberId", rental.memberId);
-                param.Add("@memberName", rental.memberName);
                 param.Add("@rentalDate", rental.rentalDate);
                 param.Add("@returnDate", rental.returnDate);
                 param.Add("@status", rental.status);
@@ -86,6 +86,14 @@ namespace LibraryMS.Services
             {
                 param.Add("@Id", rental.Id);
             });
+        }
+
+        public List<SelectListItem> StatusOptions()
+        {
+            var statusOptions = new List<SelectListItem>();
+            statusOptions.Add(new SelectListItem { Text = "Available", Value = "Available" });
+            statusOptions.Add(new SelectListItem { Text = "Rented", Value = "Rented" });
+            return statusOptions;
         }
     }
 }

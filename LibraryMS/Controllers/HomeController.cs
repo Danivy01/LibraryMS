@@ -35,27 +35,27 @@ namespace LibraryMS.Controllers
             return View();
         }
 
-        public ActionResult DeleteRent()
+        public ActionResult DeleteRent(int Id)
         {
-
-            return View();
+            var item = rentalRp.Find(Id);
+            return View(item);
         }
 
         [HttpPost]
-        public ActionResult DeleteRent(Rental rent)
+        public ActionResult DeleteRent(RentalModelView rent)
         {
             if (ModelState.IsValid)
             {
-                rentalRp.DeleteRent(rent);
+                rentalRp.DeleteRent(new Rental { Id = rent.Id });
                 return RedirectToAction("Index");
             }
             return View();
         }
 
-        public ActionResult UpdateRent()
+        public ActionResult UpdateRent(int Id)
         {
-
-            return View();
+            var item = rentalRp.Find(Id);
+            return View(item);
         }
 
         [HttpPost]
@@ -67,6 +67,12 @@ namespace LibraryMS.Controllers
                 return RedirectToAction("Index");
             }
             return View();
+        }
+
+        public ActionResult Details(int Id)
+        {
+            var item = rentalRp.Find(Id);
+            return View(item);
         }
     }
 }

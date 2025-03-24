@@ -7,6 +7,7 @@
     ViewBag.Title = "CreateRental";
     var bookList = new BookRepo().ListofBooks();
     var memberList = new MembersRepo().ListofMembers();
+    var statusOption = new RentalRepo().StatusOptions();
 
 }
 
@@ -51,15 +52,13 @@
                 @Html.EditorFor(model => model.returnDate, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.returnDate, "", new { @class = "text-danger" })
             </div>
-        </div>
+        </div>        
 
         <div class="form-group">
             @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.status)
-                    @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
-                </div>
+                @Html.DropDownListFor(model => model.status, statusOption, "Select Status", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
             </div>
         </div>
 
